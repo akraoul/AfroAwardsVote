@@ -1,6 +1,6 @@
 const PASS = "admin123"; // Simple hardcoded password
-// use relative path so it works with Vite proxy locally and Vercel rewrite in prod
-const API_URL = "/api";
+// use window.API_BASE_URL defined in config.js (fallback to /api if missing)
+const API_URL = window.API_BASE_URL || "/api";
 
 const categories = {
     'best-artist-performance': "Best Artist Performance",

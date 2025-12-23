@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { defaultNominees } from '../data/nominees';
 
 // Use relative path for proxying (Vite in dev, Vercel in prod)
-const API_URL = '/api';
+// Use environment variable for production, fallback to proxy for dev
+const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export function useNominees() {
     const [nominees, setNominees] = useState(defaultNominees);
