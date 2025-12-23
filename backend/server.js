@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const db = require('./database');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000; // Hardcoded to match Railway Custom Port setting
 
 app.use(cors()); // Allow all origins for now to simplify Vercel connection
 app.use(bodyParser.json({ limit: '50mb' })); // Increase limit for images
