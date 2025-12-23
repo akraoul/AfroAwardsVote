@@ -13,9 +13,13 @@ function App() {
   const { nominees, voteCounts, totalVotes, recordVote, getNomineeId } = useNominees();
 
   const handleVote = async (category, name) => {
-    await recordVote(category, name);
-    setToastVisible(true);
-    setTimeout(() => setToastVisible(false), 3000);
+    try {
+      await recordVote(category, name);
+      setToastVisible(true);
+      setTimeout(() => setToastVisible(false), 3000);
+    } catch (error) {
+      alert(error.message); // Show "Daily limit reached..."
+    }
   };
 
   return (

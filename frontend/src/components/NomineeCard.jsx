@@ -28,16 +28,7 @@ export default function NomineeCard({ nominee, votes, totalVotes, onVote }) {
                 )}
 
                 <div className="mt-1">
-                    <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                        <div
-                            className="h-full bg-gradient-to-r from-[#FDB931] to-[#9e7f2a] transition-all duration-500"
-                            style={{ width: `${percentage}%` }}
-                        />
-                    </div>
-                    <div className="flex justify-between text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-bold">
-                        <span>{votes} votes</span>
-                        <span>{percentage}%</span>
-                    </div>
+                    {/* Vote stats hidden */}
                 </div>
             </div>
 

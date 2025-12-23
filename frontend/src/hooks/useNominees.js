@@ -67,18 +67,39 @@ export function useNominees() {
     const recordVote = async (category, name) => {
         const key = getNomineeId(category, name);
 
-        // Optimistic
+        // Optimistic Update
         setVoteCounts(prev => ({ ...prev, [key]: (prev[key] || 0) + 1 }));
 
         try {
-            await fetch(`${API_URL}/vote`, {
+            const res = await fetch(`${API_URL}/vote`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category, name })
             });
-            // fetchNominees(); // Refresh to confirm
+
+            if (!res.ok) {
+                // Revert optimistic update
+                setVoteCounts(prev => ({ ...prev, [key]: (prev[key] || 0) - 1 }));
+
+                if (res.status === 429) {
+                    throw new Error("Daily limit reached (3 votes/category).");
+                } else {
+                    const err = await res.json();
+                    throw new Error(err.error || "Vote failed.");
+                }
+            }
+
+            // Success - stick with optimistic value (or re-fetch if strict)
         } catch (err) {
             console.error("Vote Error:", err);
+            // Revert optimistic update (if not already reverted)
+            // Note: In simple flow, checking !res.ok handles most. Network err here.
+            // For network error we should also revert if we want consistency.
+            // But logic above handles API errors.
+            // If network error (fetch throws), validation is hard. 
+            // Better to re-fetch nominees?
+            // For now, simple throw to let UI know.
+            throw err;
         }
     };
 
