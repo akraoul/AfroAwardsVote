@@ -1,1 +1,1 @@
-web: rm -rf backend/node_modules && npm rebuild sqlite3 && node backend/server.js
+web: rm -rf backend/node_modules && node backend/server.js
