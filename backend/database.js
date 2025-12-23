@@ -21,8 +21,16 @@ function initDb() {
         image_url TEXT,
         vote_count INTEGER DEFAULT 0,
         UNIQUE(category, name)
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS votes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ip_address TEXT NOT NULL,
+        category TEXT NOT NULL,
+        nominee_name TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`, (err) => {
-        if (err) console.error("Error creating table:", err);
+        if (err) console.error("Error creating votes table:", err);
         else seedDefaults();
     });
 }

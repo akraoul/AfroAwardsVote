@@ -228,19 +228,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Mobile Menu and Dropdown Fix ---
     console.log("Initializing mobile menu...");
-    
+
     // Hamburger Menu Toggle
     if (hamburgerBtn && mainNav) {
         hamburgerBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             console.log("Hamburger clicked!");
-            
+
             // Toggle hamburger animation
             hamburgerBtn.classList.toggle('active');
-            
+
             // Toggle main navigation
             mainNav.classList.toggle('active');
-            
+
             // Close dropdown if open
             if (navDropdown && navDropdown.classList.contains('active')) {
                 navDropdown.classList.remove('active');
@@ -254,10 +254,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             e.stopPropagation();
             console.log("Dropdown toggle clicked");
-            
+
             // Toggle dropdown visibility
             navDropdown.classList.toggle('active');
-            
+
             // On mobile, ensure hamburger state is correct
             if (window.innerWidth <= 768) {
                 // If hamburger is not active but dropdown is clicked, show main nav
@@ -272,14 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
         // Close dropdown if clicking outside
-        if (navDropdown && navDropdown.classList.contains('active') && 
+        if (navDropdown && navDropdown.classList.contains('active') &&
             !navDropdown.contains(e.target)) {
             navDropdown.classList.remove('active');
         }
-        
+
         // Close mobile menu if clicking outside
-        if (window.innerWidth <= 768 && mainNav && mainNav.classList.contains('active') && 
-            hamburgerBtn && !hamburgerBtn.contains(e.target) && 
+        if (window.innerWidth <= 768 && mainNav && mainNav.classList.contains('active') &&
+            hamburgerBtn && !hamburgerBtn.contains(e.target) &&
             !mainNav.contains(e.target)) {
             mainNav.classList.remove('active');
             hamburgerBtn.classList.remove('active');
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 const targetId = pill.dataset.target;
                 filterByCategory(targetId);
-                
+
                 // Close menus on mobile
                 if (window.innerWidth <= 768) {
                     if (mainNav.classList.contains('active')) {
@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.style.display = 'none';
                 }
             });
-            
+
             section.style.display = hasVisibleNominees ? 'block' : 'none';
         });
     }
@@ -417,43 +417,45 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${category}_${name.replace(/[^a-zA-Z0-9]/g, '_')}`;
     }
 
+    const API_URL = window.API_BASE_URL || "/api"; // defined in config.js or fallback
+
     async function handleVote(selectedCard) {
         const category = selectedCard.dataset.category;
         const nominee = selectedCard.dataset.nominee;
         const voteKey = getNomineeId(category, nominee);
 
-        if (supabase) {
-            voteCounts[voteKey] = (voteCounts[voteKey] || 0) + 1;
-            refreshStats();
-            showToast();
+        try {
+            // Optimistic UI Update (optional, but disabled for strict enforcement feedback)
+            // Better to wait for server response to confirm vote is allowed.
 
-            const { data: curr, error: fetchError } = await supabase
-                .from('nominees')
-                .select('id, vote_count')
-                .eq('category', category)
-                .eq('name', nominee)
-                .single();
+            const res = await fetch(`${API_URL}/vote`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, name: nominee })
+            });
 
-            if (curr) {
-                const newCount = (curr.vote_count || 0) + 1;
-                const { error: updateError } = await supabase
-                    .from('nominees')
-                    .update({ vote_count: newCount })
-                    .eq('id', curr.id);
+            const data = await res.json();
 
-                if (updateError) {
-                    console.error("Vote update failed:", updateError);
-                }
+            if (res.ok) {
+                // Success
+                voteCounts[voteKey] = data.newCount;
+                refreshStats();
+                showToast("Vote Recieved! ✅");
+
+                // Track locally just for immediate UI feedback consistency if needed
+                localStorage.setItem('afroAwardsOfflineCount', JSON.stringify(voteCounts));
+            } else if (res.status === 429) {
+                // Rate Limit Reached
+                alert("⚠️ Limit Reached: You can only vote 3 times per day for this category.");
             } else {
-                if (fetchError) console.error("Fetch error during vote:", fetchError);
-                else console.warn("Nominee not found for voting:", nominee);
+                // Other Error
+                console.error("Vote failed:", data.error);
+                alert("Vote failed: " + (data.error || "Unknown error"));
             }
-        } else {
-            console.log("Offline vote (simulated):", voteKey);
-            voteCounts[voteKey] = (voteCounts[voteKey] || 0) + 1;
-            localStorage.setItem('afroAwardsOfflineCount', JSON.stringify(voteCounts));
-            refreshStats();
-            showToast();
+
+        } catch (error) {
+            console.error("Network error submitting vote:", error);
+            alert("Network error. Please check your connection.");
         }
     }
 

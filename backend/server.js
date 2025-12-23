@@ -71,34 +71,60 @@ app.delete('/api/nominees/:id', (req, res) => {
 });
 
 // Vote (Public)
+// Vote (Public) with Rate Limiting
 app.post('/api/vote', (req, res) => {
     const { category, name } = req.body;
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    // Normalize IP (handle ::1 for localhost)
+    if (ip === '::1') ip = '127.0.0.1';
+    // If x-forwarded-for contains multiple IPs, take the first one
+    if (ip && ip.indexOf(',') > -1) {
+        ip = ip.split(',')[0];
+    }
 
     if (!category || !name) {
         res.status(400).json({ error: "Missing parameters" });
         return;
     }
 
-    // Check if exists
-    db.get("SELECT id, vote_count FROM nominees WHERE category = ? AND name = ?", [category, name], (err, row) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
+    // 1. Check Rate Limit
+    // "SELECT count(*) FROM votes WHERE ip_address = ? AND category = ? AND date(created_at) = date('now')"
+    // Note: SQLite 'date("now")' uses UTC. Ensure consistency.
+    const today = new Date().toISOString().split('T')[0];
 
-        if (row) {
-            // Upvote
-            db.run("UPDATE nominees SET vote_count = vote_count + 1 WHERE id = ?", [row.id], function (err) {
-                if (err) {
-                    res.status(500).json({ error: err.message });
-                    return;
-                }
-                res.json({ success: true, newCount: row.vote_count + 1 });
+    db.get(
+        "SELECT count(*) as count FROM votes WHERE ip_address = ? AND category = ? AND created_at LIKE ?",
+        [ip, category, `${today}%`],
+        (err, row) => {
+            if (err) {
+                console.error("Rate limit check error:", err);
+                return res.status(500).json({ error: "Server error during vote check" });
+            }
+
+            if (row.count >= 3) {
+                return res.status(429).json({ error: "Daily vote limit reached for this category (3 votes/day)." });
+            }
+
+            // 2. Process Vote if allowed
+            db.get("SELECT id, vote_count FROM nominees WHERE category = ? AND name = ?", [category, name], (err, nomineeRow) => {
+                if (err) return res.status(500).json({ error: "Database error" });
+                if (!nomineeRow) return res.status(404).json({ error: "Nominee not found" });
+
+                // Transaction-like execution
+                db.serialize(() => {
+                    // Record valid vote
+                    db.run("INSERT INTO votes (ip_address, category, nominee_name) VALUES (?, ?, ?)", [ip, category, name]);
+
+                    // Update count
+                    db.run("UPDATE nominees SET vote_count = vote_count + 1 WHERE id = ?", [nomineeRow.id], function (err) {
+                        if (err) return res.status(500).json({ error: "Failed to count vote" });
+                        res.json({ success: true, newCount: nomineeRow.vote_count + 1, votesToday: row.count + 1 });
+                    });
+                });
             });
-        } else {
-            res.status(404).json({ error: "Nominee not found" });
         }
-    });
+    );
 });
 
 app.listen(PORT, '0.0.0.0', () => {
