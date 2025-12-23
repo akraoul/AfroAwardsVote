@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFRO AWARDS IN BELARUS - Vote Now</title>
+    <meta name="description"
+        content="Official voting platform for the Afro Awards in Belarus. Vote for your favorite artists, DJs, models, and more.">
+
+    <!-- Google Fonts -->
+    <!-- Fonts: Satoshi and Placard Condensed -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/placard-condensed" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <script>console.log("INLINE HEAD DEBUG");</script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container header-inner">
+            <h2 class="logo">AFRO AWARDS</h2>
+            <div class="hamburger-menu" id="hamburgerBtn">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav class="nav-links" id="mainNav">
+                <a href="#vote" class="nav-item">Vote Now</a>
+
+                <!-- Dropdown Menu for Categories -->
+                <div class="nav-dropdown">
+                    <a href="javascript:void(0)" class="nav-item dropdown-toggle">Categories ▾</a>
+                    <div class="dropdown-menu">
+                        <button class="nav-pill active" data-target="all">All Categories</button>
+                        <button class="nav-pill" data-target="cat-artist-performance">Artist Performance</button>
+                        <button class="nav-pill" data-target="cat-best-song">Best Song</button>
+                        <button class="nav-pill" data-target="cat-best-dj">Best DJ</button>
+                        <button class="nav-pill" data-target="cat-best-album">Best Album</button>
+                        <button class="nav-pill" data-target="cat-best-tiktoker">Tik Toker</button>
+                        <button class="nav-pill" data-target="cat-best-mc">Best MC</button>
+                        <button class="nav-pill" data-target="cat-best-male-model">Male Model</button>
+                        <button class="nav-pill" data-target="cat-best-female-model">Female Model</button>
+                        <button class="nav-pill" data-target="cat-best-dancer">Best Dancer</button>
+                        <button class="nav-pill" data-target="cat-best-promoter">Promoter</button>
+                        <button class="nav-pill" data-target="cat-best-rap-artist">Rap Artist</button>
+                        <button class="nav-pill" data-target="cat-best-rap-song">Rap Song</button>
+                        <button class="nav-pill" data-target="cat-best-athlete">Athlete</button>
+                    </div>
+                </div>
+
+                <a href="#details" class="nav-item">Event Details</a>
+                <a href="#about" class="nav-item">About</a>
+                <a href="#contact" class="nav-item">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section with Poster -->
+    <section class="hero-section" id="details">
+        <div class="container hero-container">
+            <div class="hero-poster-container">
+                <img src="assets/poster.jpg" alt="Afro Awards First Edition Poster" class="hero-poster">
+            </div>
+            <div class="hero-content">
+                <h1>Afro Awards<br> <span class="hero-subtitle">First Edition</span></h1>
+                <div class="hero-details">
+                    <p><strong>DATE:</strong> 27 DEC 2025</p>
+                    <p><strong>TIME:</strong> 08:00 PM</p>
+                    <p><strong>VENUE:</strong> SAFARI LOUNGE BAR</p>
+                    <p><strong>LOC:</strong> MINSK, ZYBITSKAYA, 23</p>
+                    <div class="global-vote-display">
+                        <span class="vote-label">Total Votes Cast</span>
+                        <span id="globalVoteCount" class="vote-count">0</span>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <button id="viewLeaderboardBtn" class="cta-btn secondary">View Leaderboard</button>
+                    <a href="#vote" class="cta-btn primary">Vote Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEADERBOARD MODAL -->
+    <div id="leaderboardModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Global Leaderboard</h2>
+                <button id="closeLeaderboardBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Nominee</th>
+                            <th>Category</th>
+                            <th>Votes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Dynamic Content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content" id="vote">
+        <div class="container">
+            <!-- Search Section -->
+            <div class="filter-section">
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" placeholder="Search for artist, song, or category..."
+                        class="search-input">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="main-title-wrapper">
+                <h2>Categories</h2>
+            </div>
+
+            <!-- Categories Container -->
+            <div id="awards-container">
+                <!-- Category 1: BEST ARTIST PERFORMANCE -->
+                <section class="category-section" id="cat-artist-performance">
+                    <h3 class="category-title">Best Artist Performance of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 2: BEST SONG -->
+                <section class="category-section" id="cat-best-song">
+                    <h3 class="category-title">Best Song of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 3: BEST DJ -->
+                <section class="category-section" id="cat-best-dj">
+                    <h3 class="category-title">Best DJ of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 4: BEST ALBUM -->
+                <section class="category-section" id="cat-best-album">
+                    <h3 class="category-title">Best Album of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 5: BEST TIK TOKER -->
+                <section class="category-section" id="cat-best-tiktoker">
+                    <h3 class="category-title">Best Tik Toker of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 6: BEST MC -->
+                <section class="category-section" id="cat-best-mc">
+                    <h3 class="category-title">Best MC (Hypeman) of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 7: BEST MALE MODEL -->
+                <section class="category-section" id="cat-best-male-model">
+                    <h3 class="category-title">Best Male Model of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 8: BEST FEMALE MODEL -->
+                <section class="category-section" id="cat-best-female-model">
+                    <h3 class="category-title">Best Female Model of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 9: BEST DANCER -->
+                <section class="category-section" id="cat-best-dancer">
+                    <h3 class="category-title">Best Dancer of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 10: BEST SHOW PROMOTER -->
+                <section class="category-section" id="cat-best-promoter">
+                    <h3 class="category-title">Best Show Promoter of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 11: BEST RAP ARTIST -->
+                <section class="category-section" id="cat-best-rap-artist">
+                    <h3 class="category-title">Best Rap Artist of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 12: BEST RAP SONG -->
+                <section class="category-section" id="cat-best-rap-song">
+                    <h3 class="category-title">Best Rap Song of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+
+                <!-- Category 13: BEST ATHLETE -->
+                <section class="category-section" id="cat-best-athlete">
+                    <h3 class="category-title">Best Athlete of the Year</h3>
+                    <div class="nominees-grid">
+                        <!-- Dynamic Content -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Afro Awards in Belarus. All rights reserved.</p>
+            <button id="exportDataBtn" class="export-btn">Export Vote Data</button>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="voteToast" class="toast">Vote Saved ✔</div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/script.js?v=debug3"></script>
+</body>
+
+</html>
