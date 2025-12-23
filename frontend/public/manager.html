@@ -129,6 +129,27 @@
             <div id="totalVotesDisplay" style="font-size: 3rem; font-weight: 900; color: #fff;">0</div>
         </div>
 
+        <!-- NEW: DETAILED DASHBOARD -->
+        <div class="card">
+            <h3>Global Vote Dashboard</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; color: #fff;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-gold); text-align: left;">
+                            <th style="padding: 10px;">Rank</th>
+                            <th style="padding: 10px;">Nominee</th>
+                            <th style="padding: 10px;">Category</th>
+                            <th style="padding: 10px;">Votes</th>
+                            <th style="padding: 10px;">%</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboardBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- ADD NOMINEE FORM -->
         <div class="card">
             <h3 id="formTitle">Add New Nominee</h3>

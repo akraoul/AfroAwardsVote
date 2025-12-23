@@ -188,15 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h4>${nom.name}</h4>
                         ${nom.subText ? `<p class="sub-text">${nom.subText}</p>` : ''}
                         
-                        <div class="vote-stats">
-                            <div class="vote-progress-bg">
-                                <div class="vote-progress-fill" style="width: 0%"></div>
-                            </div>
-                            <div class="vote-count-text">
-                                <span class="count">0 votes</span>
-                                <span class="percent">0%</span>
-                            </div>
-                        </div>
+                        <!-- Vote Stats Hidden/Removed per request -->
 
                         <button class="vote-btn">Vote</button>
                     </div>

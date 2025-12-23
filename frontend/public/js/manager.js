@@ -84,10 +84,67 @@ async function fetchAndRenderNominees() {
         if (totalDisplay) totalDisplay.innerText = totalVotes.toLocaleString();
 
         renderManagerList();
+        renderDashboard();
     } catch (error) {
         console.error("Error fetching nominees:", error);
         alert("Error loading data from database. Is the server running?");
     }
+}
+
+function renderDashboard() {
+    const tbody = document.getElementById('dashboardBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // Flatten all nominees
+    let allNominees = [];
+    let totalVotesGlobal = 0;
+
+    // Calculate totals per category first to get %
+    const categoryTotals = {};
+
+    Object.keys(nomineesData).forEach(cat => {
+        let catTotal = 0;
+        nomineesData[cat].forEach(n => catTotal += (n.vote_count || 0));
+        categoryTotals[cat] = catTotal;
+        totalVotesGlobal += catTotal;
+    });
+
+    // Create flat list
+    Object.keys(nomineesData).forEach(cat => {
+        nomineesData[cat].forEach(n => {
+            const votes = n.vote_count || 0;
+            const total = categoryTotals[cat] || 0;
+            const percent = total === 0 ? 0 : Math.round((votes / total) * 100);
+
+            allNominees.push({
+                name: n.name,
+                category: categories[cat] || cat, // Use label
+                votes: votes,
+                percent: percent,
+                // rank within category? Or global? usually global dashboard sorted by votes
+                // Let's sort by votes desc
+            });
+        });
+    });
+
+    // Sort by votes (Global Leaderboard style)
+    allNominees.sort((a, b) => b.votes - a.votes);
+
+    // Limit to top 50 or show all? Show all for manager.
+    allNominees.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+
+        row.innerHTML = `
+            <td style="padding: 10px;">#${index + 1}</td>
+            <td style="padding: 10px; font-weight: bold;">${item.name}</td>
+            <td style="padding: 10px; color: #aaa;">${item.category}</td>
+            <td style="padding: 10px;">${item.votes}</td>
+            <td style="padding: 10px;">${item.percent}%</td>
+        `;
+        tbody.appendChild(row);
+    });
 }
 
 function processDataForManager(dbRows) {
