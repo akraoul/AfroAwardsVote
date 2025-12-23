@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { defaultNominees } from '../data/nominees';
+
 
 import { useState, useEffect } from 'react';
 import { defaultNominees } from '../data/nominees';
