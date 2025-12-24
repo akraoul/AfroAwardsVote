@@ -149,7 +149,7 @@ function App() {
 
       {/* Toast Notification */}
       <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 lg:left-[calc(50%-140px)] bg-[#FDB931] text-black px-6 py-3 rounded-full font-bold shadow-[0_0_20px_rgba(253,185,49,0.4)] transform transition-all duration-300 z-[3000] flex items-center gap-2 ${toastVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'}`}>
-        <span>Details Saved ✔</span>
+        <span>Thank you for voting! / Merci pour votre vote !</span>
       </div>
     </div>
   );
