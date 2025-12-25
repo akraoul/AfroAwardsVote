@@ -4,7 +4,7 @@ console.log("SUPABASE CONFIG LOADED");
 // Project URL: https://qwcrzqgktaastahajyhl.supabase.co
 // API Key provided by user
 
-const supabaseUrl = 'https://qwcrzqgktaastahajyhl.supabase.co';
+const supabaseUrl = 'https://gwcrzggktaastahajyhl.supabase.co';
 const supabaseKey = 'sb_publishable_icTBi0UlgrnInKyHRMFXMA_Gn8rmSke';
 
 // Initialize Supabase Client
