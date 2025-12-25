@@ -61,7 +61,7 @@ INSERT INTO nominees (category, name, sub_text) VALUES
 -- Best Dancer
 ('best-dancer', 'prince afro', NULL),
 ('best-dancer', 'Dc vibe', NULL),
-('best-dancer', "l'ovni", NULL),
+('best-dancer', 'l''ovni', NULL),
 ('best-dancer', 'thoko', NULL),
 
 -- Best Promoter
