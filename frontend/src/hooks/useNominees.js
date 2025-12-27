@@ -54,6 +54,11 @@ export function useNominees() {
                     newVoteCounts[key] = row.vote_count;
                 });
 
+                // Sort by ID to ensure stable order
+                Object.keys(newNominees).forEach(cat => {
+                    newNominees[cat].sort((a, b) => a.dbId - b.dbId);
+                });
+
                 setNominees(newNominees);
                 setVoteCounts(newVoteCounts);
             }
