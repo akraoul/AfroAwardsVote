@@ -86,6 +86,16 @@ app.post('/api/vote', async (req, res) => {
         return res.status(400).json({ error: "Missing parameters" });
     }
 
+    // 0. Check Voting Deadline
+    // Deadline: December 27, 2025 at 12:00 PM (Minsk Time - UTC+3)
+    // ISO string is 2025-12-27T12:00:00+03:00
+    const DEADLINE = new Date('2025-12-27T12:00:00+03:00');
+    const now = new Date();
+
+    if (now > DEADLINE) {
+        return res.status(403).json({ error: "Voting has ended. Thank you for participating!" });
+    }
+
     // 1. Check Rate Limit (Count votes by IP/Category today)
     // Note: Supabase 'created_at' is generic. query by range is best.
     const todayStart = new Date();
